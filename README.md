@@ -3,9 +3,9 @@ A minimal, mostly hard-coded, but hopefully well-organized template for the fulf
 
 This template was built for a Dept. of Psychology dissertation, so citations are currently set to APA style and many conveniences required for a more math-heavy document are missing (symbol glossary, math environment layout settings, etc.)
 
-This template shamelessly steals from the [Kaobook theme](https://github.com/fmarotta/kaobook)
+This template shamelessly steals from the [Kaobook theme][kaobook-link]
 
-Template built by [Doug Wong](https://github.com/dougUCN), and is a nicer version of his [Indiana University thesis](https://github.com/dougUCN/thesis)
+Template built by [Doug Wong][doug-wong-link], and is a nicer version of his [Indiana University thesis][indiana-thesis-link]
 
 ## Build
 
@@ -83,7 +83,7 @@ Some text \comment{This is a comment} more text
 
 # Yale Dissertation Requirements
 
-At time of writing, the [Yale dissertation formatting guidelines][registrar link] are as follows:
+At time of writing, the [Yale dissertation formatting guidelines][registrar-link] are as follows:
 
 ## Physical Requirements
 
@@ -196,3 +196,5 @@ Month Year
 <!-- HYPERLINKS -->
 [registrar-link]: https://registrar.yale.edu/students/dissertation-submission
 [kaobook-link]: https://github.com/fmarotta/kaobook
+[doug-wong-link]: https://github.com/dougUCN
+[indiana-thesis-link]: https://github.com/dougUCN/thesis
