@@ -3,7 +3,9 @@ A minimal, mostly hard-coded, but hopefully well-organized template for the fulf
 
 This template was built for a Dept. of Psychology dissertation, so citations are currently set to APA style and many conveniences required for a more math-heavy document are missing (symbol glossary, math environment layout settings, etc.)
 
-This template shamelessly steals from the much fancier template
+This template shamelessly steals from the [Kaobook theme](https://github.com/fmarotta/kaobook)
+
+Template built by [Doug Wong](https://github.com/dougUCN), and is a nicer version of his [Indiana University thesis](https://github.com/dougUCN/thesis)
 
 ## Build
 
