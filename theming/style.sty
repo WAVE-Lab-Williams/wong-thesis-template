@@ -1,0 +1,274 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom Stylization
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ProvidesPackage{theming/style}
+
+\RequirePackage{ifthen}
+\RequirePackage{tikz}
+\RequirePackage[framemethod=TikZ]{mdframed}
+\RequirePackage{titlesec}
+\RequirePackage{appendix}
+
+\RequirePackage[immediate]{silence} % https://tex.stackexchange.com/a/311003
+\WarningFilter[temp]{latex}{Command} % silence the sectsty underbar warning
+\RequirePackage{sectsty}
+\DeactivateWarningFilters[temp] % So nothing unrelated gets silenced
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Footnotes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[bottom]{footmisc} % Force footnotes to be the bottom of the page
+\interfootnotelinepenalty=10000 % Prevents footnotes from breaking across pages
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Legendbox command
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Usage: \legendbox{263238}  % Creates a box with color #263238
+
+\RequirePackage{xcolor}
+
+% Helper command that defines a color only if it doesn't exist
+\newcommand{\defifnotdef}[2]{%
+  \ifcsname color@#1\endcsname\else
+    \definecolor{#1}{HTML}{#2}%
+  \fi
+}
+
+% Modified legendbox that caches colors
+\newcommand{\legendbox}[1]{%
+  \defifnotdef{lb#1}{#1}%
+  \textcolor{lb#1}{\rule{\fontcharht\font`X}{\fontcharht\font`X}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lists (enumerates, itemize)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\labelitemi}{\small$\blacktriangleright$} % Use a black triangle for the first level of \item's
+\renewcommand{\labelitemii}{\textbullet} % Use a bullet for the second level of \item's
+\renewcommand{\labelitemiv}{\textendash} % Use an en-dash for the fourth level of \item's
+\RequirePackage{enumitem} % Used to customise lists (in particular, we don't want to put whitespace between items)
+\setlist[itemize]{noitemsep}
+\setlist[enumerate]{noitemsep}
+\setlist[description]{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section and subsection headers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Single space section headers
+\sectionfont{\normalfont\Large\bfseries\singlespacing}
+\subsectionfont{\normalfont\large\bfseries\singlespacing}
+\subsubsectionfont{\normalfont\normalsize\bfseries\singlespacing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define a new command for the appendix title
+\newcommand{\appendixtitle}[2]{%
+  \begin{center}
+    \noindent\raisebox{-1ex}{\rule{\textwidth}{1.5pt}}
+    {{\bfseries #1}.\hspace{20pt}{\huge#2}}
+    \noindent\raisebox{2ex}{\rule{\textwidth}{1.5pt}}
+  \end{center}
+}
+
+% Modify the \appendices environment
+\AtBeginEnvironment{appendices}{%
+    \titleformat{\chapter}[display]
+        {\normalfont\Huge\filcenter}
+        {}
+        {0pt}
+        {\appendixtitle{\thechapter}{#1}}
+
+    % Move appendix title higher
+    % https://tex.stackexchange.com/a/63393
+    \titlespacing*{\chapter}{0pt}{-70pt}{40pt}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Frontmatter title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\frontmattertitle}[1]{
+    \chapter*{\Large{#1}}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Table of Contents Title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\contentsname}{%
+    \noindent\mbox{%
+    \raisebox{0.5ex}{\rule{0.1\textwidth}{0.4pt}}%
+    \quad Contents\quad%
+    \raisebox{0.5ex}{\rule{\dimexpr0.88\textwidth-5.75em\relax}{0.4pt}}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter headers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define the custom chapter command with automatic chapter numbering
+% Basic usage - will automatically show the correct chapter number
+% \fancyChapter{Introduction}
+
+% With subheader
+% \fancyChapter{Methods}[Experimental Procedures]
+
+% With subheader and custom TOC entry
+% \fancyChapter{Results}[Statistical Analysis][Results and Discussion]
+
+% Store baseline skip for consistent spacing
+\newlength{\chapterbaselineskip}
+\setlength{\chapterbaselineskip}{\baselineskip}
+
+\NewDocumentCommand{\fancyChapter}{m o o}{%
+    \clearpage
+    \refstepcounter{chapter}
+    \thispagestyle{plain}
+    
+    % Handle TOC entry
+    \IfValueTF{#3}{%
+        \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#3}%
+    }{%
+        \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
+    }
+    
+    \begin{tikzpicture}[remember picture, overlay]
+        % Main title
+        \node[anchor=north east,
+              xshift=-1.7in,
+              yshift=-3\chapterbaselineskip]
+             at (current page.north east)
+             {\parbox[t]{0.8\textwidth}{
+                \begin{singlespace}\raggedleft\huge\bfseries #1\end{singlespace}
+             }};
+        
+        % Optional subheader
+        \IfValueT{#2}{
+            \node[anchor=north east,
+                  xshift=-1.7in,
+                  yshift=-6\chapterbaselineskip]
+                 at (current page.north east)
+                 {\parbox[t]{0.8\textwidth}{
+                 \begin{singlespace}\raggedleft\Large #2\end{singlespace}
+                 }};
+        }
+        
+        % Vertical line
+        \ifblank{#2}{
+            % If #2 is not defined, draw half-length line
+            \draw[thick] (current page.north east) ++(-1.55in,-3\chapterbaselineskip) -- ++(0,-3\chapterbaselineskip);
+        }{
+            % If #2 is defined, draw full-length line
+            \draw[thick] (current page.north east) ++(-1.55in,-3\chapterbaselineskip) -- ++(0,-6\chapterbaselineskip);
+        }
+        
+        % Chapter number on the right-hand side of the line
+        \node[anchor=north west,
+              xshift=-1.5in,
+              yshift=-3.25\chapterbaselineskip]
+             at (current page.north east)
+             {\fontsize{70}{120}\selectfont\bfseries\thechapter};
+    \end{tikzpicture}
+    % Add space after the chapter heading and start the text
+    \vspace{7\chapterbaselineskip}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% List of Figures and Tables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Environment to set up list of figures and tables formatting
+\newenvironment{ListOfFiguresAndTables}{
+    % Left align figures and table lists
+    \setlength{\cfttabindent}{0pt}
+    \setlength{\cfttabnumwidth}{3em}
+    \setlength{\cftfigindent}{0pt}
+    \setlength{\cftfignumwidth}{3em} % Prevent large figure numbers like 10.10 from touching the caption
+
+    % Remove spacing between per chapter figures and tables
+    \newcommand*{\noaddvspace}{\renewcommand*{\addvspace}[1]{}}
+    \addtocontents{lof}{\protect\noaddvspace}
+    \addtocontents{lot}{\protect\noaddvspace}
+
+    % Double spacing between entries
+    \setlength\cftbeforetabskip{\baselineskip}
+    \setlength\cftbeforefigskip{\baselineskip}
+
+    % Smaller headers for List of Figures and List of Tables
+    \renewcommand{\listfigurename}{\Large List of Figures}
+    \renewcommand{\listtablename}{\Large List of Tables}
+
+    % single spacing
+    \begin{singlespace}
+}
+{
+    \end{singlespace}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FONT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[scaled=.97,helvratio=.93,p,theoremfont]{newpxtext} % Serif palatino font
+\RequirePackage[vvarbb,smallerops,bigdelims]{newpxmath} % Math palatino font
+\RequirePackage[scaled=.85]{beramono} % Monospace font
+\RequirePackage[scr=rsfso,cal=boondoxo]{mathalfa} % Mathcal from STIX, unslanted a bit
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Block quote environment (single spaced)
+%
+%
+% Usage:
+% \begin{displayquote}
+%     your text here
+% \end{displayquote}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{csquotes}
+\SetBlockEnvironment{displayquote}
+\renewenvironment{displayquote}
+  {\begin{quote}\singlespacing} % Start of the environment
+  {\end{quote}} % End of the environment
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% kaobox taken from kaobook theme
+%
+%
+% Usage: 
+% \begin{kaobox}[frametitle=Title of the box]
+%     Your text here
+% \end{kaobox}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{RoyalBlue}{RGB}{65, 105, 225}
+\definecolor{White}{RGB}{255, 255, 255}
+
+%\mdfsetup{skipabove=\topskip,skipbelow=0pt}
+\mdfdefinestyle{kaoboxstyle}{
+    skipabove=1.5\topskip,
+    skipbelow=.5\topskip,
+    rightmargin=0pt,
+    leftmargin=0pt,
+    %innertopmargin=3pt,
+    %innerbottommargin=3pt,
+    innerrightmargin=7pt,
+    innerleftmargin=7pt,
+    topline=false,
+    bottomline=false,
+    rightline=false,
+    leftline=false,
+    %linewidth=1pt,
+    %roundcorner=0pt,
+    %font={},
+    %frametitlefont={},
+    frametitlerule=true,
+    linecolor=black,
+    fontcolor=black,
+}
+
+\newmdenv[
+    style=kaoboxstyle,
+    backgroundcolor=RoyalBlue!25!White,
+    frametitlebackgroundcolor=RoyalBlue!25!White,
+]{kaobox}

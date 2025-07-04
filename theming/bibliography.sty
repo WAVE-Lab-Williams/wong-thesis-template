@@ -1,0 +1,105 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Additional Bibliography Formatting
+% 
+% See preamble for biblatex settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{theming/bibliography}
+
+
+% Fancier references title 
+\defbibheading{bibintoc}[\refname]{%
+    \chapter*{%
+        \noindent\mbox{%
+        \raisebox{0.5ex}{\rule{0.1\textwidth}{0.4pt}}%
+        \quad References\quad%
+        \raisebox{0.5ex}{\rule{\dimexpr0.88\textwidth-6.6em\relax}{0.4pt}}}%
+    }%
+    \markboth{#1}{#1}%
+    \addcontentsline{toc}{chapter}{#1}%
+}
+
+% Forces bibliography to respect RHS margins
+% Looks better if this constraint is relaxed, but
+% enable this if your proofreader is being a stickler
+% https://tex.stackexchange.com/a/287753
+%
+% \appto{\bibsetup}{\raggedright}
+
+% Enforce lowercase "cit." on backreference
+\DefineBibliographyStrings{english}{
+    backrefpage = {\MakeLowercase{cit}\adddot\space on p\adddot},
+    backrefpages = {\MakeLowercase{cit}\adddot\space on pp\adddot}
+}
+
+\DeclareUnicodeCharacter{0229}{\c{e}} % So \c{e} will work
+
+% Suppress "In:" in journal citations
+\renewbibmacro{in:}{}
+
+% For citations involving two authors, change "and" to "\&"
+\renewcommand*{\finalnamedelim}{\addspace\&\space}
+
+% Change text of "DOI:" and "URL:" 
+% https://tex.stackexchange.com/a/508980
+\DeclareFieldFormat{doi}{%
+  doi\addcolon\space
+  \ifhyperref
+    {\href{https://doi.org/#1}{\nolinkurl{#1}}}
+    {\nolinkurl{#1}}}
+
+\DeclareFieldFormat{url}{URL\addcolon\addspace\url{#1}}
+
+% prevent certain fields in references from printing in bibliography
+\AtEveryBibitem{
+    \clearfield{issn}
+    \clearlist{issn}
+    \clearfield{isbn}
+    \clearlist{isbn}
+    \clearfield{language}
+    \clearlist{language}
+    \clearfield{note}
+    \clearlist{note}
+}
+
+
+% Print URL only if DOI is undefined
+\AtEveryBibitem{%
+  \iffieldundef{doi}
+    {}% if DOI is undefined
+    {\clearfield{url}\clearlist{url}}% if DOI is defined
+}
+
+\AtEveryBibitem{%
+    \ifentrytype{online}
+        {}
+        {\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}}}
+
+% Redefine \cite to make the whole citation clickable
+% Also adds a comma between Author and year with \addcomma\space
+\DeclareCiteCommand{\cite}
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \bibhyperref{\printnames{labelname}\addcomma\space\printfield{year}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+% Redefine \parencite to make the whole citation, including parentheses, clickable
+% Also adds a comma between Author and year with \addcomma\space
+\DeclareCiteCommand{\parencite}
+  {\usebibmacro{prenote}(}
+  {\bibhyperref{\usebibmacro{citeindex}%
+   \printnames{labelname}\addcomma\space\printfield{year}}}
+  {\multicitedelim}
+  {)\usebibmacro{postnote}}
+
+% Define a singlespace environment for bibliography
+\newenvironment{BibliographyEnv}{
+    % single spacing
+    \begin{singlespace}
+    \setlength\bibitemsep{\baselineskip}  %manually set separation betwen items in bibliography to double space
+}
+{
+    \end{singlespace}
+}
+

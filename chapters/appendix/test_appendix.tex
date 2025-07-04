@@ -1,0 +1,40 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{test appendix}
+\label{appx:test-appendix}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\comment{this is a comment}
+
+\begin{kaobox}[frametitle=box title]
+    this is a kaobox
+\end{kaobox}
+
+\lipsum[75]
+\begin{displayquote}
+    this is a custom block quote environment (note the single spacing)
+
+    \lipsum[2]
+\end{displayquote}
+\lipsum[75]
+
+\begin{table}
+\renewcommand*{\arraystretch}{2} % increase vertical spacing just for this table
+\centering
+\begin{tabular}{
+    lll
+}
+\toprule
+Parameter		& Specification				& Considerations	\\
+\midrule
+Field gradient $(\partial B/\partial z)/B_0$	& $10^{-4}/\text{cm or } <\qty{10}{nT\per m}$ & $T_2$ relaxation time $\sim\qty{1000}{s}$\\
+Field gradient  & $3\times 10^{-6}/\text{cm or }<\qty{0.3}{nT\per m}$ & $|d_\text{false}|<10^{-27}\,e\text{ cm}$ \\
+Residual field & $<\qty{5}{nT}$ & $\vec{E}$ and $\vec{B}$ alignment $\theta_{EB}<\qty{0.5}{\degree}$ \\
+Shielding factor & $>10^4$ for $f>\qty{0.01}{Hz}$ & Temporal drift \\
+\makecell[l]{Difference in $\langle B_0 \rangle$\\between precession cells} & $<\qty{10}{pT}$ & \makecell[l]{Flip UCN with the same $\pi/2$\\pulse after $T_\text{fp}$} \\
+\bottomrule
+\end{tabular}
+\caption[caption for list of tables here]
+{This is a needlessly complex table. Copy results from excel into chatgpt and have it convert for you. I recommend the usage of "toprule", "midrule", and "bottomrule" delimeters}\label{tab:example}
+\end{table}
+
+\blinddocument

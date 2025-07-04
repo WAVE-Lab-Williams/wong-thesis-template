@@ -1,0 +1,72 @@
+\ProvidesPackage{theming/preamble}
+
+\RequirePackage[utf8]{inputenc} % utf8 encoding in the input (.tex) file
+\RequirePackage[T1]{fontenc} % utf8 encoding in the output (.pdf) file
+\RequirePackage[
+    letterpaper,
+    left=1.5in,
+    right=1in,
+    top=1in,
+    bottom=1in,
+    % showframe, % display margin boundaries
+]{geometry}
+\RequirePackage[doublespacing]{setspace}  %use this package to set linespacing 
+
+
+\RequirePackage{graphicx}  %for images and plots
+\RequirePackage{etoolbox}
+\RequirePackage[explicit]{titlesec}  %title control and formatting
+\RequirePackage[titles]{tocloft}  %table of contents control and formatting
+
+\RequirePackage[
+    bookmarks=true,    % Enable the creation of bookmarks in the PDF
+    hidelinks,         % Hide the color and border of links
+    breaklinks,        % Allow links to break across lines
+    linktoc=all,       % Make both section titles and page numbers clickable
+]{hyperref}
+
+\RequirePackage[
+    backend=biber,
+    sorting=nyt, % Sort by name, year, title
+    style=apa,
+    sorting=nyt, % Sort by name, year, title
+    backref=true, % List page(s) where the source was cited in bibliography
+    sortcites, % Mutiple citations in \cite{} are sorted
+    giveninits=true, % Abbreviate first names in bibliography
+]{biblatex}  %reference manager
+
+\RequirePackage{appendix}
+
+\RequirePackage{url} % Link fonts in bibliography and text body
+\urlstyle{same}
+
+% Adjust URL breaking points for better line wrapping
+\renewcommand{\UrlBreaks}{\do\-\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]%
+    \do\)\do\,\do\?\do\'\do+\do\=\do\#}
+
+\RequirePackage{amsmath}
+\RequirePackage{siunitx} % handles kerning on units
+\sisetup{per-mode = symbol, % Use "/" for \per
+        detect-all=true, % Match body text font
+        list-final-separator = {, and }, % Oxford comma on lists
+        group-separator = {\,}, % Small space every 3 digits
+        group-minimum-digits = 5, % Group digits starting from 10000
+}
+% Redefine the percent unit with custom spacing
+\DeclareSIUnit{\percent}{\ensuremath{\mkern-2mu}\text{\%}}
+\DeclareSIUnit{\pixel}{px}
+
+\RequirePackage{enumitem} % allows controlling of spacing within enum environments
+
+\RequirePackage[capitalise]{cleveref} % \cref command (better than \ref)
+
+% Table/figure customization options
+\RequirePackage{booktabs}
+\RequirePackage[labelfont=bf]{caption} % bold the words "figure" and "table"
+\captionsetup[table]{aboveskip=10pt, belowskip=5pt}
+\RequirePackage{makecell} % Allow newlines in table cells with \makecell
+\RequirePackage{subcaption} % For subfigure environment
+\RequirePackage{rotating} % For sideways figures
+
+% Copyright page deco
+\RequirePackage{pgfornament}

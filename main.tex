@@ -1,0 +1,158 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preamble
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{report}   %12 point font
+
+% Packages for template testing. REMOVE THIS
+\usepackage{lipsum}
+\usepackage{blindtext}
+
+% Proofreading settings
+\usepackage{lineno} % Adds line numbers. Useful for reviewers. 
+% Start line numbering with
+% \begin{linenumbers}, end it with \end{linenumbers}. 
+% \linenumbers % uncomment to display line numbers for whole article
+% \usepackage[inline]{showlabels} % uncomment to display figure/section reference labels
+
+\usepackage{theming/preamble} % Majority of doc settings here
+\usepackage{theming/style} % Stylization
+\usepackage{theming/shortcuts} % User defined shortcuts
+\usepackage{theming/bibliography} % Additional bibliography settings
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Author, Title, etc
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\thesisTitle}{The Richness of Perception: \\Dynamic Visual Representations from Static Images}
+\newcommand{\yourName}{Kimberly W. Wong}
+\newcommand{\yourAdvisor}{Brian Scholl}
+\newcommand{\yourSchool}{Yale University}
+\newcommand{\yourMonth}{April}
+\newcommand{\yourYear}{2025}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Pick your bibliography file here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{references.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Start of Document
+%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+% Must assign page numbers even to empty frontmatter
+% so that biblatex backref does not get confused
+\pagenumbering{Alph} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\pagestyle{empty}  % Suppress page numbering for frontmatter
+\input{frontmatter/abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title Page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\input{frontmatter/title}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Copyright Page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\input{frontmatter/copyright}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Table of Contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\pagestyle{plain} % IMPORTANT: Resume page numbering for remainder of doc
+\pagenumbering{roman}
+\setcounter{page}{3} % set the page number per Yale requirements
+\currentpdfbookmark{Contents}{TOC}
+\tableofcontents
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% List of figures and tables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{ListOfFiguresAndTables}
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+\clearpage
+
+% \phantomsection
+% \addcontentsline{toc}{chapter}{List of Tables}
+% \listoftables
+% \clearpage
+\end{ListOfFiguresAndTables}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Author List
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Author List}
+\input{frontmatter/authorList.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Acknowledgements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Acknowledgements}
+\input{frontmatter/acknowledgements.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Chapters
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%
+% formatting
+%%%%%%%%%%%%%%%%%%%%%%
+
+% resume page numbering for rest of document
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Insert chapters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/introduction}
+\input{chapters/seeing_soft_materials_draped}
+\input{chapters/seeing_casual_history}
+\input{chapters/spontaneous_path_tracing}
+\input{chapters/discussion}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{appendices}
+% \input{chapters/appendix/test_appendix}
+% \end{appendices}
+
+%%%%%%%%%%%%%%%%
+% References
+%%%%%%%%%%%%%%%%
+
+% \begin{singlespace}  % use single-line spacing for multi-line text within a single reference
+%     \setlength\bibitemsep{\baselineskip}  %manually set separation betwen items in bibliography to double space
+%     \printbibliography[heading=bibintoc,title={References}]
+% \end{singlespace}
+\begin{BibliographyEnv}
+\printbibliography[heading=bibintoc,title={References}]
+\end{BibliographyEnv}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% End of Document
+%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
